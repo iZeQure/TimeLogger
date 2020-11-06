@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Timelogger.Api.Repositories;
-using Timelogger.Api.Users;
-using Timelogger.Api.Users.Interfaces;
 
-namespace Timelogger.Api.Projects
+namespace Timelogger.Models
 {
     /// <summary>
     /// Identifies a Project.
@@ -19,7 +14,7 @@ namespace Timelogger.Api.Projects
         private string _name;
         private User _user;
         private Customer _customer;
-        private List<Registration> _registrations;
+        private List<TimeRegistration> _registrations;
         private DateTime _dateOfCreation;
         private DateTime _deadline;
         private bool _isCompleted;
@@ -30,7 +25,7 @@ namespace Timelogger.Api.Projects
 
         public Customer ProjectCustomer { get => _customer; set => _customer = value; }
 
-        public List<Registration> ProjectDateTimeRegistrations { get => _registrations; set => _registrations = value; }
+        public List<TimeRegistration> ProjectDateTimeRegistrations { get => _registrations; set => _registrations = value; }
 
         public DateTime ProjectDateOfCreation { get => _dateOfCreation; set => _dateOfCreation = value; }
 
@@ -53,7 +48,7 @@ namespace Timelogger.Api.Projects
         /// <param name="dateOfCreation"></param>
         /// <param name="deadline"></param>
         /// <param name="isCompleted"></param>
-        public Project(string name, User user, Customer customer, List<Registration> registrations, DateTime dateOfCreation, DateTime deadline, bool isCompleted)
+        public Project(string name, User user, Customer customer, List<TimeRegistration> registrations, DateTime dateOfCreation, DateTime deadline, bool isCompleted)
         {
             _name = name;
             _user = user;

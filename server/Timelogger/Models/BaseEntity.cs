@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Timelogger.Api.Repositories
+namespace Timelogger.Models
 {
     /// <summary>
     /// Defines the base entity of entities.

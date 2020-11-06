@@ -1,51 +1,74 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Timelogger.Api.Projects;
-using Timelogger.Api.Repositories;
-using Timelogger.Api.Repositories.Interfaces;
+using System;
+using System.Threading.Tasks;
+using Timelogger.Models;
+using Timelogger.Repositories;
+using Timelogger.Repositories.Interfaces;
 
 namespace Timelogger.Api.Controllers
 {
-	[Route("api/[controller]")]
-	public class ProjectsController : Controller
-	{
-		private readonly ApiContext _context;
-        private IProjectRepository ProjectRepository { get; } = new ProjectRepository();
+    [Route("api/[controller]")]
+    public class ProjectsController : Controller
+    {
+        private readonly IProjectRepository _repository;
+        public ProjectsController(IProjectRepository repository) => _repository = repository;
 
-		public ProjectsController(ApiContext context)
-		{
-			_context = context;
-		}
-
-		[HttpPost]
-		public IActionResult Create([FromBody] Project project)
+        [HttpPost]
+        public IActionResult Create([FromBody] Project project)
         {
-			if (project == null)
-				return BadRequest("Bad Request.");
+            if (project == null)
+                return ValidationProblem();
 
             try
             {
-				ProjectRepository.Create(project);
+                _repository.Create(project).GetAwaiter();
 
-				return Ok();
+                return Ok();
             }
-            catch (System.Exception e)
+            catch (Exception)
             {
-				return BadRequest("Could not process request. " + e.Message);
+                return BadRequest();
             }
         }
 
-		[HttpGet]
-		[Route("hello-world")]
-		public string HelloWorld()
-		{
-			return "Hello Back!";
-		}
+        [HttpGet]
+        public IActionResult GetAll()
+        {            
+            try
+            {
+                var result = _repository.GetAll().GetAwaiter().GetResult();
 
-		// GET api/projects
-		[HttpGet]
-		public IActionResult Get()
-		{
-			return Ok(_context.Projects);
-		}
-	}
+                if (result == null) return NotFound();
+                else return Ok(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetById(int id)
+        {
+            if (id == 0) return BadRequest();
+
+            try
+            {
+                Project project = new Project();
+
+                Task.Run(async () =>
+                {
+                    project = await _repository.GetById(id);
+                });
+
+                if (project == null) return NotFound();
+                else return Ok(project);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+    }
 }

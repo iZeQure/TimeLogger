@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Timelogger.Api.Communication
+namespace Timelogger
 {
-    public class DatabaseCommunitcation : IDisposable
+    public class ApiDatabase : IDisposable
     {
-        private static DatabaseCommunitcation instance = null;
+        private static ApiDatabase instance = null;
         private readonly SqlConnection _sqlConnection;
 
-        private DatabaseCommunitcation()
+        private ApiDatabase()
         {
             _sqlConnection = new SqlConnection()
             {
@@ -25,11 +25,11 @@ namespace Timelogger.Api.Communication
 
         public SqlConnection SqlConnection { get => _sqlConnection; }
 
-        public static DatabaseCommunitcation Instance
+        public static ApiDatabase Instance
         {
             get
             {
-                if (instance == null) instance = new DatabaseCommunitcation();
+                if (instance == null) instance = new ApiDatabase();
 
                 return instance;
             }

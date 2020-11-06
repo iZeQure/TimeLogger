@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Timelogger.Api.Repositories;
-using Timelogger.Api.Users.Interfaces;
+﻿using Timelogger.Models.Interfaces;
 
-namespace Timelogger.Api.Users
+namespace Timelogger.Models
 {
     /// <summary>
     /// Identifies a Customer.

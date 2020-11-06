@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Timelogger.Api.Users.Interfaces
+namespace Timelogger.Models.Interfaces
 {
     /// <summary>
     /// Contains the basic information for Users.
