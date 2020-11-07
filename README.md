@@ -1,5 +1,6 @@
 ## TimeLogger
  My view of what a timelogger is, used for project control and invoices.
+ > Some of the docs is found here, how I've provided a solution for the challenge. [link to Diagrams!](https://lucid.app/invitations/accept/e466f24b-2946-485a-9add-42fe8068a6f1)
  
 #### NUnit Testing
 Providing the ability to test the controllers.
