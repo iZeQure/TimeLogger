@@ -70,5 +70,43 @@ namespace Timelogger.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("user/{id}")]
+        public IActionResult GetProjectsByUserId(int id)
+        {
+            try
+            {
+                if (id == 0) return BadRequest();
+
+                var result = _repository.GetProjectsByUserId(id).GetAwaiter().GetResult();
+
+                if (result == null) return NotFound();
+                else return Ok(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/registrations")]
+        public IActionResult GetTimeRegistrationsPerProjectByProjectId(int id)
+        {
+            try
+            {
+                if (id == 0) return BadRequest();
+
+                var result = _repository.GetProjectTimeRegistrationsByProjectId(id).GetAwaiter().GetResult();
+
+                if (result == null) return NotFound("No registrated times for project.");
+                else return Ok(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

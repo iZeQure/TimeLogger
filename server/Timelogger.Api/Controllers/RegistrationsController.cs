@@ -32,7 +32,7 @@ namespace Timelogger.Api.Controllers
                 if (!(timeRegistration.RegistrationDateTime.TotalMinutes >= 30))
                     return Conflict("Registration cannot be registered if less than 30 minutes.");
 
-                _repository.Create(timeRegistration).GetAwaiter();
+                _repository.Create(timeRegistration).Wait();
 
                 return Ok();
             }
@@ -40,6 +40,6 @@ namespace Timelogger.Api.Controllers
             {
                 return BadRequest();
             }
-        }
+        }        
     }
 }

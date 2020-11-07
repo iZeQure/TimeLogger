@@ -42,7 +42,7 @@ namespace Timelogger
                 if (_sqlConnection.State != ConnectionState.Open)
                 {
                     if (_sqlConnection.State != ConnectionState.Connecting)
-                        _sqlConnection.OpenAsync();
+                        _sqlConnection.Open();
                     else
                     {
                         int counter = 10;
@@ -56,7 +56,7 @@ namespace Timelogger
                                 if (_sqlConnection.State == ConnectionState.Connecting)
                                     counter = 10;
                                 else
-                                    _sqlConnection.OpenAsync();
+                                    _sqlConnection.Open();
                             }
                         } while (_sqlConnection.State == ConnectionState.Connecting);
                     }

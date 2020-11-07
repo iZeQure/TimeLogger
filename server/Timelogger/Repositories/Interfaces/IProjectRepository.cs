@@ -9,5 +9,7 @@ namespace Timelogger.Repositories.Interfaces
     public interface IProjectRepository : IBaseRepository<Project>
     {
         Task<List<Project>> SortProjectsByDeadline();
+        Task<List<Project>> GetProjectsByUserId(int id);
+        Task<List<Project>> GetProjectTimeRegistrationsByProjectId(int id);
     }
 }

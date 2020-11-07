@@ -170,6 +170,118 @@ namespace Timelogger.Repositories
             }
         }
 
+        public async Task<List<Project>> GetProjectsByUserId(int id)
+        {
+            using SqlCommand command = new SqlCommand()
+            {
+                CommandText = "proc_SelectProjectsByUserId_project",
+                CommandType = CommandType.StoredProcedure,
+                Connection = GetDatabase.SqlConnection
+            };
+
+            command.Parameters.AddWithValue("@userID", id);
+
+            try
+            {
+                GetDatabase.OpenConn.Wait();
+
+                SqlDataReader dataReader = await command.ExecuteReaderAsync();
+
+                if (!dataReader.HasRows) await Task.CompletedTask;
+                else
+                {
+                    List<Project> projects = new List<Project>();
+                    while (await dataReader.ReadAsync())
+                    {
+                        projects.Add(
+                            new Project()
+                            {
+                                EntityId = dataReader.GetInt32("ProjectID"),
+                                ProjectName = dataReader.GetString("Name"),
+                                ProjectDateOfCreation = dataReader.GetDateTime("DateOfCreation"),
+                                ProjectDeadline = dataReader.GetDateTime("Deadline")
+                            });
+                    }
+                    return projects;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                await GetDatabase.CloseConn;
+                await Task.CompletedTask;
+            }
+        }
+
+        public async Task<List<Project>> GetProjectTimeRegistrationsByProjectId(int id)
+        {
+            using SqlCommand command = new SqlCommand()
+            {
+                CommandText = "proc_SelectProjectTimeRegistrationsByProjectId_project",
+                CommandType = CommandType.StoredProcedure,
+                Connection = GetDatabase.SqlConnection
+            };
+
+            command.Parameters.AddWithValue("@projectID", id);
+
+            try
+            {
+                GetDatabase.OpenConn.Wait();
+
+                SqlDataReader dataReader = await command.ExecuteReaderAsync();
+
+                if (!dataReader.HasRows) await Task.CompletedTask;
+                else
+                {
+                    List<Project> projects = new List<Project>();
+                    while (await dataReader.ReadAsync())
+                    {
+                        if (!projects.Any(p => p.EntityId == dataReader.GetInt32("ProjectID")))
+                        {
+                            projects.Add(
+                            new Project()
+                            {
+                                EntityId = dataReader.GetInt32("ProjectID"),
+                                ProjectName = dataReader.GetString("ProjectName"),
+                                ProjectDateTimeRegistrations = new List<TimeRegistration>()
+                            });
+                        }
+                        else
+                        {
+                            foreach (var p in projects)
+                            {
+                                if (p.EntityId == dataReader.GetInt32("RegistrationForProjectID"))
+                                {
+                                    p.ProjectDateTimeRegistrations.Add(
+                                        new TimeRegistration()
+                                        {
+                                            EntityId = dataReader.GetInt32("RegistrationID"),
+                                            RegistrationDateTime = dataReader.GetTimeSpan(4)
+                                        }
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    return projects;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                await GetDatabase.CloseConn;
+                await Task.CompletedTask;
+            }
+        }
+
         public Task<List<Project>> SortProjectsByDeadline()
         {
             throw new NotImplementedException();

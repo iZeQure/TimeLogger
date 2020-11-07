@@ -55,6 +55,8 @@ DROP PROCEDURE IF EXISTS [proc_SelectById_project]
 DROP PROCEDURE IF EXISTS [proc_SelectAll_projects]
 DROP PROCEDURE IF EXISTS [proc_SelectAllSortedByDeadline_projects]
 DROP PROCEDURE IF EXISTS [proc_SelectAllSortedByDeadlineDescending_projects]
+DROP PROCEDURE IF EXISTS [proc_SelectProjectsByUserId_project]
+DROP PROCEDURE IF EXISTS [proc_SelectProjectTimeRegistrationsByProjectId_project]
 
 DROP PROCEDURE IF EXISTS [proc_Insert_registration]
 GO
@@ -118,6 +120,36 @@ CREATE PROCEDURE [proc_SelectAllSortedByDeadlineDescending_projects]
 AS
 	BEGIN
 		SELECT * FROM [Project] ORDER BY [Deadline] DESC;
+	END
+GO
+
+CREATE PROCEDURE [proc_SelectProjectsByUserId_project](
+	@userID INT)
+AS
+	BEGIN 
+		SELECT 
+			[Project].[ID] AS 'ProjectID',
+			[Project].[Name],
+			[Project].[DateOfCreation],
+			[Project].[Deadline]
+		FROM [Project] WHERE [Project].[UserID] = @userID;
+	END
+GO
+
+CREATE PROCEDURE [proc_SelectProjectTimeRegistrationsByProjectId_project] (
+	@projectID INT)
+AS
+	BEGIN
+		SELECT
+			[Project].[ID] AS 'ProjectID',
+			[Project].[Name] AS 'ProjectName',
+			[Registration].[ID] AS 'RegistrationID',
+			[Registration].[ProjectID] AS 'RegistrationForProjectID',
+			[Registration].[RegistrationTime]
+		FROM [Project] 
+		INNER JOIN [Registration]
+		ON [Registration].[ProjectID] = [Project].[ID]
+		WHERE [Project].[ID] = @projectID
 	END
 GO
 

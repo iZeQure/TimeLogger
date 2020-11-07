@@ -7,7 +7,7 @@ namespace Timelogger.Models
     /// <summary>
     /// Defines the base entity of entities.
     /// </summary>
-    public class BaseEntity
+    public abstract class BaseEntity
     {
         private int _entityId;
 
